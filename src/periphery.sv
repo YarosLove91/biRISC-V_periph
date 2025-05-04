@@ -28,8 +28,8 @@ localparam SLAVES_QTY   = RTC_IDX       + RTC_QTY     ;
 localparam EF_TCC32_REGS_QTY = 1024; // 1024 - 963 = 61 reserved | 0x0000 - 0x0FFC (if qty == 1)
 localparam RTC_REGS_QTY      = 16  ; // 16 - 13 = 3 reserved     | 0x1000 - 0x103C (if qty == 1)
 
-localparam EF_TCC32_BA  = 0;
-localparam RTC_BA       = EF_TCC32_QTY * EF_TCC32_REGS_QTY * 4;
+localparam EF_TCC32_BA  = PERIPH_BA;
+localparam RTC_BA       = EF_TCC32_BA + EF_TCC32_QTY * EF_TCC32_REGS_QTY * 4;
 
 // slave address map rule
 typedef struct packed {

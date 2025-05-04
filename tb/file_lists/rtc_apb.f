@@ -17,7 +17,7 @@
 ./src/rtc/rtl/bus_wrappers/rtc_apb.sv
 
 ./src/EF_TCC32/hdl/rtl/EF_TCC32.v
-./src/EF_TCC32/hdl/rtl/bus_wrappers/EF_TCC32_apb_pulp.sv
+./src/EF_TCC32/hdl/rtl/bus_wrappers/EF_TCC32_apb.sv
 ./src/periphery.sv
 ./tb/common/tb_env_pkg.sv
 ./tb/rtc_apb/tb.sv

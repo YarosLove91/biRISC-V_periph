@@ -48,7 +48,7 @@ module axil_periphery_wrap #(
   output logic [31:0] axi_rdata,    // Read Data
   output logic [1:0]  axi_rresp,    // Read Response
   output logic        axi_rvalid,   // Read Valid
-  input  logic        axi_rready   // Read Ready
+  input  logic        axi_rready,   // Read Ready
 
 `else
   AXI_LITE.Slave                    axil_slave,

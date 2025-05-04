@@ -1,0 +1,21 @@
+[submodule "src/rtc"]
+	path = src/rtc
+	url = git@github.com:YarosLove91/rtc.git
+[submodule "src/EF_TCC32"]
+	path = src/EF_TCC32
+	url = git@github.com:YarosLove91/EF_TCC32.git
+[submodule "src/apb_pulp"]
+	path = src/apb_pulp
+	url = git@github.com:YarosLove91/apb_pulp.git
+[submodule "src/common_cells"]
+	path = src/common_cells
+	url = https://github.com/pulp-platform/common_cells.git
+[submodule "src/axi2apb"]
+	path = src/axi2apb
+	url = https://github.com/pulp-platform/axi2apb.git
+[submodule "src/axi"]
+	path = src/axi
+	url = https://github.com/YarosLove91/axi.git
+[submodule "src/wb2axip"]
+	path = src/wb2axip
+	url = git@github.com:ZipCPU/wb2axip.git

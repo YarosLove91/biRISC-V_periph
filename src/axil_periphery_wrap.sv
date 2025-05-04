@@ -12,18 +12,47 @@ module axil_periphery_wrap #(
   parameter int unsigned APB_AW       = 32,       // APB Address width
   parameter int unsigned APB_DW       = 32,       // APB Data width
   
-  parameter int unsigned PERIPH_BA    = 32'h0000_0000, // Peripheral base address
+  parameter int unsigned PERIPH_BA    = 32'h0004_0000, // Peripheral base address
   parameter int unsigned EF_TCC32_QTY = 1,        // Number of timer/counter modules
-  parameter int unsigned RTC_QTY      = 1,        // Number of RTC modules
-  
-  parameter bit PipelineRequest       = 1'b0,     // Pipeline request path
-  parameter bit PipelineResponse      = 1'b0      // Pipeline response path
+  parameter int unsigned RTC_QTY      = 1         // Number of RTC modules
 ) (
   
   input  logic                     clk_i,
   input  logic                     rst_ni,
   
+// NOTE: verilator doesn't support interfaces in top module
+`ifdef AXIL_PERIPH_IS_TOP
+
+  // AXI Lite Write Address Channel
+  input  logic [31:0] axi_awaddr,   // Write Address
+  input  logic        axi_awvalid,  // Write Address Valid
+  output logic        axi_awready,  // Write Address Ready
+  
+  // AXI Lite Write Data Channel
+  input  logic [31:0] axi_wdata,    // Write Data
+  input  logic [3:0]  axi_wstrb,    // Write Strobes
+  input  logic        axi_wvalid,
+  output logic        axi_wready,   // Write Ready
+  
+  // AXI Lite Write Response Channel
+  output logic [1:0]  axi_bresp,    // Write Response
+  output logic        axi_bvalid,   // Write Response Valid
+  input  logic        axi_bready,   // Response Ready
+  
+  // AXI Lite Read Address Channel
+  input  logic [31:0] axi_araddr,   // Read Address
+  input  logic        axi_arvalid,  // Read Address Valid
+  output logic        axi_arready,  // Read Address Ready
+  
+  // AXI Lite Read Data Channel
+  output logic [31:0] axi_rdata,    // Read Data
+  output logic [1:0]  axi_rresp,    // Read Response
+  output logic        axi_rvalid,   // Read Valid
+  input  logic        axi_rready   // Read Ready
+
+`else
   AXI_LITE.Slave                    axil_slave,
+`endif
 
   input  logic [EF_TCC32_QTY-1:0]  ef_tcc32_ext_clk,
   output logic [EF_TCC32_QTY-1:0]  ef_tcc32_irq,
@@ -112,10 +141,31 @@ end
     .S_AXI_ACLK       (clk_i),
     .S_AXI_ARESETN    (rst_ni),
 
+`ifdef AXIL_PERIPH_IS_TOP
+    .S_AXI_AWVALID  (axi_awvalid),
+    .S_AXI_AWREADY  (axi_awready),
+    .S_AXI_AWADDR   (axi_awaddr),
+    .S_AXI_AWPROT   ('0),
+    .S_AXI_WVALID   (axi_wvalid),
+    .S_AXI_WREADY   (axi_wready),
+    .S_AXI_WDATA    (axi_wdata),
+    .S_AXI_WSTRB    (axi_wstrb),
+    .S_AXI_BVALID   (axi_bvalid),
+    .S_AXI_BREADY   (axi_bready),
+    .S_AXI_BRESP    (axi_bresp),
+    .S_AXI_ARVALID  (axi_arvalid),
+    .S_AXI_ARREADY  (axi_arready),
+    .S_AXI_ARADDR   (axi_araddr),
+    .S_AXI_ARPROT   ('0),
+    .S_AXI_RVALID   (axi_rvalid),
+    .S_AXI_RREADY   (axi_rready),
+    .S_AXI_RDATA    (axi_rdata),
+    .S_AXI_RRESP    (axi_rresp),
+`else
     .S_AXI_AWVALID  (axil_slave.aw_valid),
     .S_AXI_AWREADY  (axil_slave.aw_ready),
     .S_AXI_AWADDR   (axil_slave.aw_addr),
-    .S_AXI_AWPROT   (axil_slave.aw_prot),
+    .S_AXI_AWPROT   ('0),
     .S_AXI_WVALID   (axil_slave.w_valid),
     .S_AXI_WREADY   (axil_slave.w_ready),
     .S_AXI_WDATA    (axil_slave.w_data),
@@ -126,11 +176,12 @@ end
     .S_AXI_ARVALID  (axil_slave.ar_valid),
     .S_AXI_ARREADY  (axil_slave.ar_ready),
     .S_AXI_ARADDR   (axil_slave.ar_addr),
-    .S_AXI_ARPROT   (axil_slave.ar_prot),
+    .S_AXI_ARPROT   ('0),
     .S_AXI_RVALID   (axil_slave.r_valid),
     .S_AXI_RREADY   (axil_slave.r_ready),
     .S_AXI_RDATA    (axil_slave.r_data),
     .S_AXI_RRESP    (axil_slave.r_resp),
+`endif
 
     .M_APB_PADDR      (paddr),
     .M_APB_PPROT      (pprot),
@@ -142,7 +193,6 @@ end
     .M_APB_PREADY     (pready),
     .M_APB_PRDATA     (prdata),
     .M_APB_PSLVERR    (pslverr)
-    
   );
 
 
@@ -157,19 +207,19 @@ end
   assign pslverr          = s_apb_if.pslverr;
 
   periphery #(
-    .APB_AW       (APB_AW),
-    .APB_DW       (APB_DW),
-    .PERIPH_BA    (PERIPH_BA),
-    .EF_TCC32_QTY (EF_TCC32_QTY),
-    .RTC_QTY      (RTC_QTY)
+    .APB_AW      (APB_AW      ),
+    .APB_DW      (APB_DW      ),
+    .PERIPH_BA   (PERIPH_BA   ),
+    .EF_TCC32_QTY(EF_TCC32_QTY),
+    .RTC_QTY     (RTC_QTY     )
   ) dut_periphery (
-    .pclk             (pclk),
-    .prst_n           (prst_n),
-    .s_apb            (s_apb_if.Slave),
-    .ef_tcc32_ext_clk (ef_tcc32_ext_clk),
-    .ef_tcc32_irq     (ef_tcc32_irq),
-    .ef_tcc32_pwm     (ef_tcc32_pwm),
-    .rtc_irq          (rtc_irq)
+    .pclk            (pclk            ),
+    .prst_n          (prst_n          ),
+    .s_apb           (s_apb_if.Slave  ),
+    .ef_tcc32_ext_clk(ef_tcc32_ext_clk),
+    .ef_tcc32_irq    (ef_tcc32_irq    ),
+    .ef_tcc32_pwm    (ef_tcc32_pwm    ),
+    .rtc_irq         (rtc_irq         )
   );
 
   initial begin : parameter_checks

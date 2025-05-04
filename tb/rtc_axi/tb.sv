@@ -89,23 +89,21 @@ end
 
 // DUT - AXI Lite Periphery Top
 axil_periphery_wrap #(
-    .AXI_LITE_AW             (AXI_LITE_AW),
-    .AXI_LITE_DW             (AXI_LITE_DW),
-    .APB_AW             (APB_AW),
-    .APB_DW             (APB_DW),
-    .PERIPH_BA          (PERIPH_BA),
-    .EF_TCC32_QTY       (EF_TCC32_QTY),
-    .RTC_QTY            (RTC_QTY),
-    .PipelineRequest    (1'b0),
-    .PipelineResponse   (1'b0)
+    .AXI_LITE_AW (AXI_LITE_AW ),
+    .AXI_LITE_DW (AXI_LITE_DW ),
+    .APB_AW      (APB_AW      ),
+    .APB_DW      (APB_DW      ),
+    .PERIPH_BA   (PERIPH_BA   ),
+    .EF_TCC32_QTY(EF_TCC32_QTY),
+    .RTC_QTY     (RTC_QTY     )
 ) dut (
-    .clk_i              (clk_i),
-    .rst_ni             (rst_ni),
-    .axil_slave     (axi.Slave),
-    .ef_tcc32_ext_clk   (ef_tcc32_ext_clk),
-    .ef_tcc32_irq       (ef_tcc32_irq),
-    .ef_tcc32_pwm       (ef_tcc32_pwm),
-    .rtc_irq            (rtc_irq)
+    .clk_i           (clk_i           ),
+    .rst_ni          (rst_ni          ),
+    .axil_slave      (axi.Slave       ),
+    .ef_tcc32_ext_clk(ef_tcc32_ext_clk),
+    .ef_tcc32_irq    (ef_tcc32_irq    ),
+    .ef_tcc32_pwm    (ef_tcc32_pwm    ),
+    .rtc_irq         (rtc_irq         )
 );
 
 endmodule

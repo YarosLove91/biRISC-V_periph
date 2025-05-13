@@ -34,7 +34,7 @@ endif
 ###############################################################################
 
 OUTPUT_DIR       ?= tb_output
-ENABLE_COVERAGE  ?= 0
+ENABLE_COVERAGE  ?= 1w
 TEST_NAME 		 ?= REGS_ACCESS_TEST
 
 VERILATOR_FLAGS ?=
@@ -81,11 +81,13 @@ else ifeq ($(MAKECMDGOALS), periphery_apb_tb)
 	# add test define
 	VERILATOR_FLAGS += +define+$(TEST_NAME)
     VERILATOR_INPUT = -f tb/file_lists/periphery_apb.f
+else ifeq ($(MAKECMDGOALS), axil_ef_tcc32)
+    VERILATOR_INPUT = -f tb/file_lists/axil_ef_tcc32_list.f
 else ifeq ($(MAKECMDGOALS), clean)
 else ifneq ($(MAKECMDGOALS), )
-    $(error Unknown target: $(MAKECMDGOALS). Use 'make rtc_apb_tb', 'make periphery_apb_tb' or 'make rtc_axi_tb')
+    $(error Unknown target: $(MAKECMDGOALS). Use 'make rtc_apb_tb', 'make periphery_apb_tb' , 'make axil_ef_tcc32' or 'make rtc_axi_tb')
 else
-    $(error ERROR. Use 'make rtc_apb_tb', 'make periphery_apb_tb' or 'make rtc_axi_tb')
+    $(error ERROR. Use 'make rtc_apb_tb', 'make periphery_apb_tb', 'make axil_ef_tcc32' or 'make rtc_axi_tb')
 endif
 
 ######################################################################
@@ -105,6 +107,7 @@ default: run
 rtc_apb_tb:run
 periphery_apb_tb:run
 rtc_axi_tb: run
+axil_ef_tcc32: run
 
 run:
 	@echo

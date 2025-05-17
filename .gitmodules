@@ -16,6 +16,15 @@
 [submodule "src/axi"]
 	path = src/axi
 	url = https://github.com/YarosLove91/axi.git
+[submodule "src/apb_uart_sv"]
+	path = src/apb_uart_sv
+	url = git@github.com:pulp-platform/apb_uart_sv.git
+[submodule "src/-force"]
+	path = src/-force
+	url = git@github.com:YarosLove91/wb2axip.git
+[submodule "src/--force"]
+	path = src/--force
+	url = git@github.com:YarosLove91/wb2axip.git
 [submodule "src/wb2axip"]
 	path = src/wb2axip
-	url = git@github.com:ZipCPU/wb2axip.git
+	url = git@github.com:YarosLove91/wb2axip.git

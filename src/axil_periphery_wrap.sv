@@ -14,7 +14,8 @@ module axil_periphery_wrap #(
   
   parameter int unsigned PERIPH_BA    = 32'h0004_0000, // Peripheral base address
   parameter int unsigned EF_TCC32_QTY = 1,        // Number of timer/counter modules
-  parameter int unsigned RTC_QTY      = 1         // Number of RTC modules
+  parameter int unsigned RTC_QTY      = 1,        // Number of RTC modules
+  parameter int unsigned UART_QTY     = 1
 ) (
   
   input  logic                     clk_i,
@@ -57,7 +58,10 @@ module axil_periphery_wrap #(
   input  logic [EF_TCC32_QTY-1:0]  ef_tcc32_ext_clk,
   output logic [EF_TCC32_QTY-1:0]  ef_tcc32_irq,
   output logic [EF_TCC32_QTY-1:0]  ef_tcc32_pwm,
-  output logic [RTC_QTY-1:0]       rtc_irq
+  output logic [RTC_QTY-1:0]       rtc_irq,
+  input  logic uart_rx,     
+  output logic uart_tx,      
+  output logic uart_interrupt  
 );
 
 localparam EF_TCC32_IDX = 0                           ;
@@ -211,7 +215,8 @@ end
     .APB_DW      (APB_DW      ),
     .PERIPH_BA   (PERIPH_BA   ),
     .EF_TCC32_QTY(EF_TCC32_QTY),
-    .RTC_QTY     (RTC_QTY     )
+    .RTC_QTY     (RTC_QTY     ),
+    .UART_QTY    (UART_QTY)
   ) dut_periphery (
     .pclk            (pclk            ),
     .prst_n          (prst_n          ),
@@ -219,7 +224,10 @@ end
     .ef_tcc32_ext_clk(ef_tcc32_ext_clk),
     .ef_tcc32_irq    (ef_tcc32_irq    ),
     .ef_tcc32_pwm    (ef_tcc32_pwm    ),
-    .rtc_irq         (rtc_irq         )
+    .rtc_irq         (rtc_irq         ),
+    .uart_rx   (uart_rx),      
+    .uart_tx   (uart_tx),      
+    .uart_interrupt(uart_interrupt)  
   );
 
   initial begin : parameter_checks

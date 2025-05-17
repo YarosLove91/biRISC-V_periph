@@ -1,8 +1,9 @@
 +incdir+./src/common_cells/include
 +incdir+./src/apb_pulp/include
 +incdir+./src/axi/include
-+incdir+./tb/axil_ef_tcc32_tb
-+incdir+./tb
++incdir+./src/apb_uart_sv
++incdir+./tb/axil_uart_tb
+// +incdir+./tb
 
 ./src/common_cells/src/cf_math_pkg.sv
 ./src/common_cells/src/addr_decode_dync.sv
@@ -43,7 +44,7 @@
 ./src/apb_uart_sv/uart_rx.sv
 ./src/apb_uart_sv/uart_tx.sv
 
-./tb/axil_ef_tcc32_tb/tb_env_pkg.sv
-./tb/axil_ef_tcc32_tb/axil_tasks.svh
-./tb/axil_ef_tcc32_tb/axil_ef_tcc32_test.svh
-./tb/axil_ef_tcc32_tb/tb.sv
+./tb/axil_uart_tb/tb_env_pkg.sv
+./tb/axil_uart_tb/axil_tasks.svh
+./tb/axil_uart_tb/axil_uart_test.svh
+./tb/axil_uart_tb/tb.sv

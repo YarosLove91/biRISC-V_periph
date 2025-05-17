@@ -30,6 +30,13 @@
 ./src/rtc/rtl/rtc_top.sv
 ./src/rtc/rtl/bus_wrappers/rtc_apb.sv
 
+./src/apb_uart_sv/apb_uart_sv.sv
+// ./src/apb_uart_sv/apb_uart.sv
+./src/apb_uart_sv/io_generic_fifo.sv
+./src/apb_uart_sv/uart_interrupt.sv
+./src/apb_uart_sv/uart_rx.sv
+./src/apb_uart_sv/uart_tx.sv
+
 ./src/EF_TCC32/hdl/rtl/EF_TCC32.v
 ./src/EF_TCC32/hdl/rtl/bus_wrappers/EF_TCC32_apb.sv
 ./src/periphery.sv

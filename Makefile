@@ -69,7 +69,7 @@ VERILATOR_FLAGS += --top tb
 # Run Verilator in debug mode
 # VERILATOR_FLAGS += --debug
 # Add this trace to get a backtrace in gdb
-#VERILATOR_FLAGS += --gdbbt
+# VERILATOR_FLAGS += --gdbbt
 
 VERILATOR_INPUT ?=
 # Input files for Verilator
@@ -83,6 +83,8 @@ else ifeq ($(MAKECMDGOALS), periphery_apb_tb)
     VERILATOR_INPUT = -f tb/file_lists/periphery_apb.f
 else ifeq ($(MAKECMDGOALS), axil_ef_tcc32)
     VERILATOR_INPUT = -f tb/file_lists/axil_ef_tcc32_list.f
+else ifeq ($(MAKECMDGOALS), axil_uart)
+    VERILATOR_INPUT = -f tb/file_lists/uart_axil.f
 else ifeq ($(MAKECMDGOALS), clean)
 else ifneq ($(MAKECMDGOALS), )
     $(error Unknown target: $(MAKECMDGOALS). Use 'make rtc_apb_tb', 'make periphery_apb_tb' , 'make axil_ef_tcc32' or 'make rtc_axi_tb')
@@ -108,6 +110,7 @@ rtc_apb_tb:run
 periphery_apb_tb:run
 rtc_axi_tb: run
 axil_ef_tcc32: run
+axil_uart: run
 
 run:
 	@echo

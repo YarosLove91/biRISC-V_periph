@@ -114,17 +114,15 @@ localparam RTC_REGS_QTY          = 16               ; // considers reserved regs
 localparam UART_BASE_ADDR       = RTC_BASE_ADDR + (RTC_QTY * RTC_REGS_QTY * 4);
 localparam UART_REGS_QTY        = 8;  // Количество регистров UART
 
-// Адреса регистров UART (смещения от базового адреса)
-localparam UART_RBR_THR_DLL_ADDR = 0*4;  // Receiver Buffer/Transmitter Holding/Divisor Latch LSB
-localparam UART_IER_DLM_ADDR     = 1*4;  // Interrupt Enable/Divisor Latch MSB
-localparam UART_IIR_FCR_ADDR     = 2*4;  // Interrupt Identification/FIFO Control
-localparam UART_LCR_ADDR         = 3*4;  // Line Control
-localparam UART_MCR_ADDR         = 4*4;  // Modem Control
-localparam UART_LSR_ADDR         = 5*4;  // Line Status
-localparam UART_MSR_ADDR         = 6*4;  // Modem Status
-localparam UART_SCR_ADDR         = 7*4;  // Scratch
+localparam UART_RBR_THR_DLL_ADDR = 0;  // Receiver Buffer/Transmitter Holding/Divisor Latch LSB
+localparam UART_IER_DLM_ADDR     = 1;  // Interrupt Enable/Divisor Latch MSB
+localparam UART_IIR_FCR_ADDR     = 2;  // Interrupt Identification/FIFO Control
+localparam UART_LCR_ADDR         = 3;  // Line Control
+localparam UART_MCR_ADDR         = 4;  // Modem Control
+localparam UART_LSR_ADDR         = 5;  // Line Status
+localparam UART_MSR_ADDR         = 6;  // Modem Status
+localparam UART_SCR_ADDR         = 7;  // Scratch
 
-// Битовая маска для регистра LCR (Line Control Register)
 localparam LCR_WLS0              = 0;    // Word Length Select bit 0
 localparam LCR_WLS1              = 1;    // Word Length Select bit 1
 localparam LCR_STB               = 2;    // Stop Bits
@@ -134,7 +132,6 @@ localparam LCR_SP                = 5;    // Stick Parity
 localparam LCR_BC                = 6;    // Break Control
 localparam LCR_DLAB              = 7;    // Divisor Latch Access Bit
 
-// Битовая маска для регистра LSR (Line Status Register)
 localparam LSR_DR                = 0;    // Data Ready
 localparam LSR_OE                = 1;    // Overrun Error
 localparam LSR_PE                = 2;    // Parity Error
@@ -144,20 +141,17 @@ localparam LSR_THRE              = 5;    // Transmitter Holding Register Empty
 localparam LSR_TEMT              = 6;    // Transmitter Empty
 localparam LSR_RXFE              = 7;    // Error in RCVR FIFO
 
-// Битовая маска для регистра IER (Interrupt Enable Register)
 localparam IER_RDA               = 0;    // Received Data Available interrupt
 localparam IER_THRE              = 1;    // Transmitter Holding Register Empty interrupt
 localparam IER_RLS               = 2;    // Receiver Line Status interrupt
 localparam IER_MS                = 3;    // Modem Status interrupt
 
-// Битовая маска для регистра IIR (Interrupt Identification Register)
 localparam IIR_IP                = 0;    // Interrupt Pending (active low)
 localparam IIR_IID0              = 1;    // Interrupt ID bit 0
 localparam IIR_IID1              = 2;    // Interrupt ID bit 1
 localparam IIR_IID2              = 3;    // Interrupt ID bit 2
 localparam IIR_FIFO_EN           = 3;    // FIFOs Enabled (bits 3-6)
 
-// Типы прерываний UART
 localparam UART_INT_NONE         = 3'b000;
 localparam UART_INT_RLS          = 3'b011; // Receiver Line Status
 localparam UART_INT_RDA          = 3'b010; // Received Data Available
@@ -172,9 +166,9 @@ logic ef_tcc32_ext_clk;
 logic ef_tcc32_irq;
 logic ef_tcc32_pwm;
 logic rtc_irq;
-logic uart_irq;                     // Добавлен сигнал прерывания UART
-logic uart_rx;                      // Добавлен сигнал RX
-logic uart_tx;                      // Добавлен сигнал TX
+logic uart_irq;                   
+logic uart_rx;                    
+logic uart_tx;                    
 
 int err_cnt;
 

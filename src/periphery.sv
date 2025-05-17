@@ -4,7 +4,8 @@ module periphery
                     APB_DW          = 32,
                     PERIPH_BA       = 0, // periphery base address
                     EF_TCC32_QTY    = 1,
-                    RTC_QTY         = 1
+                    RTC_QTY         = 1,
+                    UART_QTY        = 1
 
 ) (
     // apb slave intf
@@ -18,18 +19,24 @@ module periphery
     // outputs
     output logic ef_tcc32_irq    ,
     output logic ef_tcc32_pwm    ,
-    output logic rtc_irq         
+    output logic rtc_irq         ,
+    input  logic uart_rx,     
+    output logic uart_tx,      
+    output logic uart_interrupt  
 );
 
-localparam EF_TCC32_IDX = 0                           ;
+localparam EF_TCC32_IDX = 0;
 localparam RTC_IDX      = EF_TCC32_IDX  + EF_TCC32_QTY;
-localparam SLAVES_QTY   = RTC_IDX       + RTC_QTY     ;
+localparam UART_IDX     = RTC_IDX       + RTC_QTY;         
+localparam SLAVES_QTY   = UART_IDX      + UART_QTY;         
 
 localparam EF_TCC32_REGS_QTY = 1024; // 1024 - 963 = 61 reserved | 0x0000 - 0x0FFC (if qty == 1)
 localparam RTC_REGS_QTY      = 16  ; // 16 - 13 = 3 reserved     | 0x1000 - 0x103C (if qty == 1)
+localparam UART_REGS_QTY     = 8;    // 0x2000 - 0x201C
 
 localparam EF_TCC32_BA  = PERIPH_BA;
 localparam RTC_BA       = EF_TCC32_BA + EF_TCC32_QTY * EF_TCC32_REGS_QTY * 4;
+localparam UART_BA      = RTC_BA + RTC_QTY * RTC_REGS_QTY * 4; 
 
 // slave address map rule
 typedef struct packed {
@@ -43,7 +50,7 @@ typedef rule_t [SLAVES_QTY - 1:0] addr_map_t;
 
 function addr_map_t get_addr_map();
     addr_map_t addr_map;
-    int ef_tcc32_idx, rtc_idx;
+    int ef_tcc32_idx, rtc_idx, uart_idx;
 
     for (int rule_idx = 0; rule_idx < EF_TCC32_QTY; rule_idx++) begin
         ef_tcc32_idx = rule_idx;
@@ -62,6 +69,15 @@ function addr_map_t get_addr_map();
             end_addr:   RTC_BA + ((rtc_idx+1) * RTC_REGS_QTY * 4)
         };
         rtc_idx++;
+    end
+
+    for (int rule_idx = EF_TCC32_QTY + RTC_QTY; rule_idx < SLAVES_QTY; rule_idx++) begin
+        addr_map[rule_idx] = rule_t'{
+            idx:        unsigned'(rule_idx),
+            start_addr: UART_BA + (uart_idx * UART_REGS_QTY * 4),
+            end_addr:   UART_BA + ((uart_idx+1) * UART_REGS_QTY * 4)
+        };
+        uart_idx++;
     end
 
     return addr_map;
@@ -133,6 +149,24 @@ rtc_apb #(
     .s_apb (s_apb_selected[RTC_IDX].Slave)
 );
 
+apb_uart_sv #(
+    .APB_ADDR_WIDTH(APB_AW)
+) i_apb_uart (
+    .CLK     (pclk),
+    .RSTN    (prst_n),
+    .PADDR   (s_apb_selected[UART_IDX].paddr-periph_addr_map[UART_IDX].start_addr), 
+    .PWDATA  (s_apb_selected[UART_IDX].pwdata),
+    .PWRITE  (s_apb_selected[UART_IDX].pwrite),
+    .PSEL    (s_apb_selected[UART_IDX].psel),
+    .PENABLE (s_apb_selected[UART_IDX].penable),
+    .PRDATA  (s_apb_selected[UART_IDX].prdata),
+    .PREADY  (s_apb_selected[UART_IDX].pready),
+    .PSLVERR (s_apb_selected[UART_IDX].pslverr),
+
+    .rx_i    (uart_rx),
+    .tx_o    (uart_tx),
+    .event_o (uart_interrupt)
+);
 
 
 endmodule : periphery

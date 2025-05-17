@@ -19,6 +19,3 @@
 [submodule "src/apb_uart_sv"]
 	path = src/apb_uart_sv
 	url = git@github.com:pulp-platform/apb_uart_sv.git
-[submodule "src/wb2axip"]
-	path = src/wb2axip
-	url = git@github.com:YarosLove91/wb2axip.git
